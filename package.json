@@ -1,0 +1,31 @@
+{
+  "type": "module",
+  "name": "ezpbarsjs",
+  "version": "0.0.1",
+  "description": "client library for ezpbars.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezpbars/ezpbarsjs.git"
+  },
+  "keywords": [
+    "progress",
+    "bar"
+  ],
+  "author": "Amanda Moore",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ezpbars/ezpbarsjs/issues"
+  },
+  "homepage": "https://github.com/ezpbars/ezpbarsjs#readme",
+  "devDependencies": {
+    "@babel/core": "^7.19.6",
+    "jest": "^29.2.2",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4"
+  }
+}
