@@ -12,6 +12,5 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npx prettier --check **/*.tsx
       - run: npx prettier --check **/*.ts
       - run: npm test
