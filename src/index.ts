@@ -218,13 +218,20 @@ class TraceHandler {
  * or StandardProgressDisplay
  *
  * ```ts
- * import { waitForCompletion, StandardProgressDisplay } from 'ezpbars';
+ * import { waitForCompletion, StandardProgressDisplay } from 'ezpbarsjs';
  *
  * const pbar = new StandardProgressDisplay();
  * document.body.appendChild(pbar.element);
  * const response = await fetch(
- *   'https://ezpbars.com/api/1/examples/job?duration=5&stdev=1',
- *   {method: 'POST'}
+ *   'https://ezpbars.com/api/1/examples/job',
+ *   {
+ *    method: 'POST',
+ *    headers: { "content-type": "application/json; charset=UTF-8" },
+ *    body: JSON.stringify({
+ *      duration: 5,
+ *      stdev: 1,
+ *    }),
+ *   }
  * )
  * /** @type {{uid: str, sub: str, pbar_name: str}} * /
  * const data = await response.json();
