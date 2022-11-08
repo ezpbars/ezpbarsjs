@@ -1,12 +1,21 @@
 import { ProgressBar } from './ProgressBar.js';
 
 /**
- * shows a typical progress abr using the progress element, which proceeds from 0 to 100 percent
+ * shows a typical progress bar using the progress element, which proceeds from 0 to 100 percent
  * and then stays at 100% until completion; jumps to 100% if it completes before expected.
  */
 export class LinearOverallProgressBar implements ProgressBar {
+  /**
+   * the element this view is attached to
+   */
   readonly element: Element;
+  /**
+   * the total overall eta for the progress bar to complete from start to finish in seconds
+   */
   private _overallEtaSeconds: number;
+  /**
+   * the total remaining time for the progress to complete in seconds
+   */
   private _remainingEtaSeconds: number;
 
   constructor() {

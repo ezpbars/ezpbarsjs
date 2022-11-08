@@ -1,5 +1,9 @@
 import { ProgressBar } from './ProgressBar.js';
 
+/**
+ * the arguments for the waitForCompletion function, which is the
+ * main entry point for the library
+ */
 export type WaitForCompletionArgs = {
   /**
    * the name of the progress bar to wait for completion of
@@ -13,6 +17,15 @@ export type WaitForCompletionArgs = {
    * the identifier for the account the progress bar belongs to
    */
   sub: string;
+  /**
+   * checks if your backend is finished processing the trace;
+   * used as a fallback if ezpbars is not available.
+   *
+   * typically, this is implemented using a fetch to your backend,
+   * in the same way that you would normally get the result after
+   * this library notifies you that the result is ready
+   */
+  pollResult: () => Promise<boolean>;
   /**
    * the progress bar that's being rendered
    *
@@ -31,17 +44,11 @@ export type WaitForCompletionArgs = {
    * @default true
    */
   ssl: boolean;
-  /**
-   * checks if your backend is finished processing the trace;
-   * used as a fallback if ezpbars is not available.
-   *
-   * typically, this is implemented using a fetch to your backend,
-   * in the same way that you would normally get the result after
-   * this library notifies you that the result is ready
-   */
-  pollResult: () => Promise<boolean>;
 };
 
+/**
+ * handles receiving a trace from the websocket
+ */
 class TraceHandler {
   /**
    * the identifier for the account the progress bar belongs to
@@ -157,6 +164,9 @@ class TraceHandler {
       return this.onComplete(null);
     }
   }
+  /**
+   * sends the authentication request to the websocket
+   */
   sendAuthRequest() {
     this.ws.addEventListener('message', this.onAuthResponse);
     this.ws.send(
@@ -206,14 +216,22 @@ class TraceHandler {
  * const pbar = new StandardProgressDisplay();
  * document.body.appendChild(pbar.element);
  * const response = await fetch(
- *  'https://ezpbars.com/api/1/examples/one_second_job',
- *  {method: 'POST'}
+ *   'https://ezpbars.com/api/1/examples/job?duration=5&stdev=1',
+ *   {method: 'POST'}
  * )
+ * /** @type {{uid: str, sub: str, pbar_name: str}} * /
  * const data = await response.json();
- * const uid = data.uid;
- * const sub = data.sub;
- * const pbarName = data.pbar_name;
- * await waitForCompletion({sub, pbarName, uid, pbar});
+ * const getResult = async () => {
+ *   const response = await fetch(`https://ezpbars.com/api/1/examples/job/${data.uid}`)
+ *   const result = await response.json();
+ *   if (result.status === 'complete') {
+ *     return result.data;
+ *   }
+ *   return null;
+ * }
+ * const pollResult = async () => (await getResult()) !== null;
+ * await waitForCompletion({sub: data.sub, pbarName: data.pbar_name, uid: data.uid, pbar, pollResult});
+ * console.log(await getResult());
  * ```
  *
  * @param args the arguments to use when waiting for completion of the progress

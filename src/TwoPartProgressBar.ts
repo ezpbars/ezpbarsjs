@@ -27,6 +27,9 @@ export class TwoPartProgressBar implements ProgressBar {
    */
   private currentlyShowingHaveTimeRemaining: boolean;
 
+  /**
+   * The total remaining time for the progress to complete in seconds
+   */
   private _remainingEtaSeconds: number;
 
   constructor(haveTimeRemaining: ProgressBarWithElement, noTimeRemaining: ProgressBarWithElement) {
@@ -71,6 +74,12 @@ export class TwoPartProgressBar implements ProgressBar {
     console.error(err);
   }
 
+  /**
+   * updates which progress bar is delegated to based on the remaining time
+   *
+   * if there is still time remaining on the progress bar, a linear progress bar
+   * is shown. If there is no time remaining (or negative time), a spinner is shown.
+   */
   private update() {
     const shouldShowHaveTimeRemaining = this._remainingEtaSeconds > 0;
 

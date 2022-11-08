@@ -4,8 +4,17 @@ import { ProgressBar } from './ProgressBar.js';
  * requires spinner.css
  */
 export class Spinner implements ProgressBar {
+  /**
+   * the element this view is attached to
+   */
   readonly element: Element;
+  /**
+   * the total overall eta for the progress bar to complete from start to finish in seconds
+   */
   private _overallEtaSeconds: number;
+  /**
+   * the total remaining time for the progress to complete in seconds
+   */
   private _remainingEtaSeconds: number;
 
   constructor() {
