@@ -38,6 +38,10 @@
     {
       "from": "src/examples.html",
       "to": "build/examples.html"
+    },
+    {
+      "from": "src/spinner.css",
+      "to": "build/spinner.css"
     }
   ],
   "copyFilesSettings": {

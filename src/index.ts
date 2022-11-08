@@ -87,6 +87,9 @@ class TraceHandler {
    * @param error the error that occurred, if any
    */
   onComplete: (error: string | null) => void;
+  /**
+   * same as WaitForCompletionArgs#pollResult
+   */
   pollResult: () => Promise<boolean>;
   constructor(args: WaitForCompletionArgs, onComplete: (error: string | null) => void) {
     this.sub = args.sub;
@@ -110,6 +113,10 @@ class TraceHandler {
   url(): string {
     return `${'wss' ? this.ssl : 'ws'}://${this.domain}/api/2/progress_bars/traces/`;
   }
+  /**
+   * opens the websocket and sets the initial listeners
+   * @private
+   */
   connect() {
     this.ws = new WebSocket(this.url());
     this.ws.addEventListener('open', this.sendAuthRequest);
@@ -120,7 +127,7 @@ class TraceHandler {
    * called when the connection to the websocket is closed
    * @param closeEvent the close event received from the websocket
    */
-  onCloseEvent(closeEvent: CloseEvent) {
+  private onCloseEvent(closeEvent: CloseEvent) {
     this.failures++;
     setTimeout(
       (() => {
@@ -134,7 +141,7 @@ class TraceHandler {
    * handles receiving the authentication response from the websocket
    * @param messageEvent the message event received from the websocket
    */
-  onAuthResponse(messageEvent: MessageEvent) {
+  private onAuthResponse(messageEvent: MessageEvent) {
     const data = JSON.parse(messageEvent.data);
     if (!data.success) {
       this.pbar.onError(new Error(data.error_message));
@@ -149,7 +156,7 @@ class TraceHandler {
    * handles receiving a trace message from the websocket
    * @param messageEvent the message event received from the websocket
    */
-  onTraceMessage(messageEvent: MessageEvent) {
+  private onTraceMessage(messageEvent: MessageEvent) {
     const data = JSON.parse(messageEvent.data);
     if (data.type === 'update') {
       this.pbar.overallEtaSeconds = data.data.overall_eta_seconds;
@@ -167,7 +174,7 @@ class TraceHandler {
   /**
    * sends the authentication request to the websocket
    */
-  sendAuthRequest() {
+  private sendAuthRequest() {
     this.ws.addEventListener('message', this.onAuthResponse);
     this.ws.send(
       JSON.stringify({
@@ -182,7 +189,7 @@ class TraceHandler {
    * waits up to 15 seconds before trying to reconnect based on how many times it's already tried
    * @param failures the number of times the websocket has failed to connect in the past minute
    */
-  async retryConnection(failures: number) {
+  private async retryConnection(failures: number) {
     let delay = 0;
     if (failures === 3) {
       delay = 1;

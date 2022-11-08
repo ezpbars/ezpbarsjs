@@ -45,6 +45,10 @@ export class LinearOverallProgressBar implements ProgressBar {
 
   private update() {
     const progress = 100 - (this._remainingEtaSeconds / this._overallEtaSeconds) * 100;
-    this.element.setAttribute('value', progress.toString());
+    if (progress > 100) {
+      this.element.setAttribute('value', '100');
+    } else {
+      this.element.setAttribute('value', progress.toString());
+    }
   }
 }

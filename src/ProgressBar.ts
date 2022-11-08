@@ -8,7 +8,8 @@ export type ProgressBar = {
    */
   set overallEtaSeconds(eta: number);
   /**
-   * the estimated time remaining for the task to complete in seconds
+   * the estimated time remaining for the task to complete in seconds;
+   * may be negative if the task is taking longer than expected
    */
   set remainingEtaSeconds(eta: number);
   /**
@@ -22,7 +23,8 @@ export type ProgressBar = {
   set stepOverallEtaSeconds(eta: number);
   /**
    * the estimated time remaining for the step the progress bar is currently on
-   * to complete in seconds
+   * to complete in seconds; may be negative if the step is taking longer than
+   * expected
    */
   set stepRemainingEtaSeconds(eta: number);
 
