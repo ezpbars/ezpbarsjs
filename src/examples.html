@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ezpbarsjs progress bar examples</title>
+    <link rel="stylesheet" href="spinner.css" />
+  </head>
+  <body>
+    <h1>ezpbarsjs progress bar examples</h1>
+    <h2>Linear overall progress bar</h2>
+    <div id="linear-overall-1"></div>
+    <script type="module"></script>
+    <h2>Spinner</h2>
+    <div id="spinner-1"></div>
+    <h2>Standard Progress Display</h2>
+    <div id="two-part-1"></div>
+    <script type="module">
+      import { LinearOverallProgressBar } from '/LinearOverallProgressBar.js';
+      import { Spinner } from '/Spinner.js';
+      import { StandardProgressDisplay } from '/StandardProgressDisplay.js';
+
+      const easeInOutSine = (x) => {
+        return -(Math.cos(Math.PI * x) - 1) / 2;
+      };
+
+      const oscillate = (pbar) => {
+        let start = 0;
+        let target = Math.floor(Math.random() * 100);
+        let progress = 0;
+        let sleepTimeRemaining = 0;
+
+        const PROGRESS_PER_MILLISECOND = 0.001;
+
+        const calculateEtaFromProgress = () => {
+          const distance = target - start;
+          return start + distance * easeInOutSine(progress);
+        };
+
+        const onTimePassed = (delta) => {
+          if (sleepTimeRemaining > 0) {
+            sleepTimeRemaining -= delta;
+            return;
+          }
+
+          progress += delta * PROGRESS_PER_MILLISECOND;
+          if (progress >= 1) {
+            start = target;
+            target = Math.floor(Math.random() * 130) - 15;
+            if (target < 0) {
+              target = 0;
+            }
+            if (target > 100) {
+              target = 100;
+            }
+            progress = 0;
+            sleepTimeRemaining = 500;
+          }
+
+          pbar.remainingEtaSeconds = calculateEtaFromProgress();
+        };
+
+        let lastTick = 0;
+        const onFrame = (totalTime) => {
+          onTimePassed(totalTime - lastTick);
+          lastTick = totalTime;
+          requestAnimationFrame(onFrame);
+        };
+
+        requestAnimationFrame(onFrame);
+      };
+
+      document.getElementById('linear-overall-1').appendChild(
+        (() => {
+          const progressBar = new LinearOverallProgressBar();
+          oscillate(progressBar);
+          return progressBar.element;
+        })()
+      );
+      document.getElementById('spinner-1').appendChild(
+        (() => {
+          const spinner = new Spinner();
+          return spinner.element;
+        })()
+      );
+      document.getElementById('two-part-1').appendChild(
+        (() => {
+          const pbar = new StandardProgressDisplay();
+          oscillate(pbar);
+          return pbar.element;
+        })()
+      );
+    </script>
+    <div id="spinner-2"></div>
+  </body>
+</html>
