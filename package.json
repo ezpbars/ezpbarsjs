@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "ezpbarsjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "client library for ezpbars.com",
   "main": "index.js",
   "scripts": {

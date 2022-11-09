@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
+      "allowJs": true,
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "declarationMap": true,
       "module": "NodeNext",
       "noImplicitAny": true,
       "removeComments": true,
