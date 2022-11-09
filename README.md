@@ -111,7 +111,7 @@ const response = await fetch(
 /** @type {{uid: str, sub: str, pbar_name: str}} */
 const data = await response.json();
 const getResult = async () => {
-  const response = await fetch(`https://ezpbars.com/api/1/examples/job/${data.uid}`)
+  const response = await fetch(`https://ezpbars.com/api/1/examples/job?uid=${data.uid}`)
   const result = await response.json();
   if (result.status === 'complete') {
     return result.data;
